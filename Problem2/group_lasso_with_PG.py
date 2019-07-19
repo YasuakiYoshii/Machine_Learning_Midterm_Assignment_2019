@@ -42,7 +42,7 @@ constraints = []
 prob = cv.Problem(objective, constraints)
 result = prob.solve(solver=cv.CVXOPT)
 west = west.value
-print(west.shape)
+#print(west.shape)
 
 # proximal gradient method for group lasso
 # inital x
@@ -65,4 +65,6 @@ plt.contour(X1, X2, fValue)
 plt.plot(w_history[:,0], w_history[:,1], 'ro-', markersize=3, linewidth=0.5, label='PG with group lasso')
 plt.plot(west[0], west[1], 'ko', label='cvx with group lasso')
 plt.legend()
+plt.savefig("results/group_lasso_path.png")
+plt.savefig("results/group_lasso_path.eps")
 plt.show()

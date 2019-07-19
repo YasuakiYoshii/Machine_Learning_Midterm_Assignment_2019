@@ -16,8 +16,8 @@ def compare():
     plt.plot(rmsp_result, 'gs-', markersize=1, linewidth=0.5, label="RMS Prop") # better
     plt.plot(na_result, 'ks-', markersize=1, linewidth=0.5, label="Nadam")
     plt.legend()
-    #plt.savefig("compared.png")
-    #plt.savefig("compared.eps")
+    plt.savefig("compared.png")
+    plt.savefig("compared.eps")
     plt.show()
     return
 

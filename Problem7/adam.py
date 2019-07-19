@@ -36,7 +36,7 @@ def optimize(b1 = 0.7, b2 = 0.999999999, ee = 1.0e-8, aa= 0.2):
     print("Optimizing with Adam ...")
     print("---------------------------------------------------------------")
     print("step".rjust(4) + "  " + "gnorm".ljust(22) + " " + "obj_fun")
-    for t in range(1,10001):
+    for t in range(1,101):
         step += 1
         x_history.append(xt.T)
         grad = 2 * np.dot(A, xt-mu)

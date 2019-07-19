@@ -7,7 +7,7 @@ import numpy as np
 import itertools
 from dataset import load5
 
-def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-3):
+def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
     """
     optimizer with Newton's Method
 
@@ -45,14 +45,16 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-3):
     print("---------------------------------------------------------------")
     while 1:
         w_history.append(w)
-        hessian = [2 * lam * np.eye(5), 2 * lam * np.eye(5), 2 * lam * np.eye(5)]
-        grad = 2 * lam * w
+        hessian = [np.zeros((5,5)), np.zeros((5,5)), np.zeros((5,5))]
+        grad = np.zeros_like(w)
         obj_fun = lam * np.trace(np.dot(w.T, w))
         L = 0
+        # batch
         for i in range(n):
             yi = y[i].reshape((1,1))
             xi = x[i].reshape((5,1))
-            exps = np.exp(np.dot(w.T, xi))
+            c = np.max(np.dot(w.T, xi)) # avoid overflow
+            exps = np.exp(np.dot(w.T, xi) - c)
             softmax = exps / np.sum(exps)
             for j in range(class_num):
                 if (j ==yi):
@@ -61,15 +63,19 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-3):
                     grad[:,j] += (softmax[j].reshape((1,1)) * xi).reshape((5,))
                 hessian[j] += (1 - softmax[j]) * softmax[j] * np.dot(xi, xi.T)
             L -= (np.log(softmax[yi]))
+        # scaling and regularization
         for j in range(class_num):
             hessian[j] /= n
+            hessian[j] += 2 * lam * np.eye(5)
         grad /= n
+        grad += 2 * lam * w
+        L /= n
         obj_fun += L
-        obj_fun /= n
         print(str(step).rjust(4) + ": " + str(np.linalg.norm(grad)).ljust(22) + " " + str(np.asscalar(obj_fun)))
         obj_fun_history.append(np.asscalar(obj_fun))
         if (np.linalg.norm(grad) < tol):
             break
+        # update w
         for j in range(class_num):
             d = np.dot(np.linalg.inv(hessian[j]), grad[:,j])
             w[:,j] -= alpha * d

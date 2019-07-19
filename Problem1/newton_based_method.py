@@ -4,7 +4,7 @@ import numpy as np
 import itertools
 from dataset import load4
 
-def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-3):
+def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
 
     # preprocessing
     x = np.hstack([x, np.ones((n, 1))])
