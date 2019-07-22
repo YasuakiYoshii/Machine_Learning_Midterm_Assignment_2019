@@ -21,9 +21,9 @@ def st_ops(mu, q):
   return x_proj
 
 # we need to control this parameter to generate multiple figures
-#lam = 2;
+lam = 2;
 #lam = 4;
-lam = 6;
+#lam = 6;
 d = 2; # dimention of w
 
 x_1 = np.arange(-1.5, 3, 0.01)
@@ -72,6 +72,8 @@ plt.plot(x_history[:,0], x_history[:,1], 'ro-', markersize=3, linewidth=0.5, lab
 plt.plot(w_lasso[0], w_lasso[1], 'ko', label='w_lasso')
 
 plt.legend()
+plt.xlabel('w1')
+plt.ylabel('w2')
 plt.xlim(-1.5, 3)
 plt.ylim(-1.5, 3)
 path = "results/"

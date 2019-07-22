@@ -54,6 +54,8 @@ for lam in lams:
     ###
 plt.plot(lams, w_hat_lam_1, label='w1')
 plt.plot(lams, w_hat_lam_2, label='w2')
+plt.xlabel('lambda')
+plt.ylabel('w')
 plt.legend()
 path = "results/"
 try:
