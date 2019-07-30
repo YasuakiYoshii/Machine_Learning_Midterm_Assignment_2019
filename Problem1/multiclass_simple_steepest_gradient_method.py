@@ -21,7 +21,7 @@ def optimize(x, y, lam = 2, n = 200, alpha = 0.02, tol = 1e-6):
     while 1:
         w_history.append(w)
         grad = np.zeros_like(w)
-        obj_fun = lam * np.trace(np.dot(w.T, w))
+        obj_fun = lam * np.linalg.norm(w)
         L = 0
         for i in range(n):
             yi = y[i].reshape((1,1))
@@ -43,7 +43,8 @@ def optimize(x, y, lam = 2, n = 200, alpha = 0.02, tol = 1e-6):
         obj_fun += L
         print(str(step).rjust(4) + ": " + str(np.linalg.norm(grad)).ljust(22) + " " + str(np.asscalar(obj_fun)))
         obj_fun_history.append(np.asscalar(obj_fun))
-        if (np.linalg.norm(grad) < tol):
+        #if (np.linalg.norm(grad) < tol):
+        if (step >= 200):
             break
         w -= alpha * grad
         step += 1

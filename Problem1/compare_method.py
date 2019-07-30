@@ -51,7 +51,7 @@ def compare(method_1 = "bsg", method_2 = "nb", dataset = 4):
     plt.yscale('log')
     plt.plot(np.arange(0, len(diff_1), 1), diff_1, marker="o", color = "red", linewidth=0.5, linestyle = "--", markersize=1, label=label1)
     plt.plot(np.arange(0, len(diff_2), 1), diff_2, marker="v", color = "blue", linewidth=0.5, linestyle = ":", markersize=1, label=label2)
-    plt.ylabel("diff of func")
+    plt.ylabel("$J(w^{(t)}) - J(\hat{w})$")
     plt.xlabel("iteration")
     #plt.yscale('log')
     plt.xlim(0, max(len(diff_1), len(diff_2)))

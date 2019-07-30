@@ -1,4 +1,5 @@
 import sys, os
+sys.path.append(os.pardir) # to import files in parent directory
 import numpy as np
 import matplotlib.pyplot as plt
 import cvxpy as cv
@@ -16,54 +17,65 @@ def st_ops(mu, q):
         x_proj[i] = mu[i] + q;
   return x_proj
 
-# prepare dataset
-np.random.seed(3846)
-n = 40
-omega = np.random.randn()
-noise = 0.8 * np.random.randn(n)
+lams = [2, 4, 6]
+d = 2; # dimention of w
 
-x = np.random.randn(n, 2) + 0
-y = 2 * (omega * x[:,0] + x[:,1] + noise > 0) - 1
+x_1 = np.arange(-1.5, 3, 0.01)
+x_2 = np.arange(-1.5, 3, 0.02)
 
-#plt.plot(np.extract(y>0,x[:,0]),np.extract(y>0,x[:,1]), 'x')
-#plt.plot(np.extract(y<0,x[:,0]),np.extract(y<0,x[:,1]), 'o')
+X1, X2 = np.mgrid[-1.5:3:0.01, -1.5:3:0.02]
+fValue = np.zeros((len(x_1), len(x_2)))
 
-# condition
 A = np.array([[  3, 0.5],
               [0.5,   1]])
 mu = np.array([[1],
                [2]])
-w_hat_lam_1 = []
-w_hat_lam_2 = []
-lams = np.arange(0, 6, 0.1)
+
 # inital x
-w_init = np.array([[ 3],
+x_init = np.array([[ 3],
                    [-1]])
 L = 1.01 * np.max(np.linalg.eig(2 * A)[0])
 
 for lam in lams:
-    ### implement PG ###
-    wt = w_init
+    for i in range(len(x_1)):
+      for j in range(len(x_2)):
+            inr = np.vstack([x_1[i], x_2[j]])
+            fValue[i, j] = np.dot(np.dot((inr-mu).T, A), (inr- mu)) + lam * (np.abs(x_1[i]) + np.abs(x_2[j]))
+    # cvx
+    w_lasso = cv.Variable((d,1))
+    obj_fn = cv.quad_form(w_lasso - mu, A) + lam * cv.norm(w_lasso, 1)
+    objective  = cv.Minimize(obj_fn)
+    constraints = []
+    prob = cv.Problem(objective, constraints)
+    result = prob.solve(solver=cv.CVXOPT)
+    w_lasso = w_lasso.value
+    x_history = []
+    xt = x_init
     for t in range(1000):
-        grad = 2 * np.dot(A, wt-mu)
-        wth = wt - 1/L * grad
-        wt = st_ops(wth, lam * 1 / L)
-    w_hat = wt
-    w_hat_lam_1.append(w_hat[0])
-    w_hat_lam_2.append(w_hat[1])
-    ###
-plt.plot(lams, w_hat_lam_1, label='w1')
-plt.plot(lams, w_hat_lam_2, label='w2')
-plt.xlabel('lambda')
-plt.ylabel('w')
-plt.legend()
-path = "results/"
-try:
-    os.mkdir(path)
-except OSError:
-    print ("Creation of the directory %s failed or Already exists" % path)
-else:
-    print ("Successfully created the directory %s " % path)
-plt.savefig(path + "lasso_path" + ".png")
-plt.savefig(path + "lasso_path" + ".eps")
+      x_history.append(xt.T)
+      grad = 2 * np.dot(A, xt-mu)
+      xth = xt - 1/L * grad
+      xt = st_ops(xth, lam * 1 / L)
+
+    x_history = np.vstack(x_history)
+
+    plt.figure()
+    plt.contour(X1, X2, fValue)
+    plt.plot(x_history[:,0], x_history[:,1], 'ro-', markersize=3, linewidth=0.5, label='x')
+    plt.plot(w_lasso[0], w_lasso[1], 'ko', label='w_lasso')
+
+    plt.legend()
+    plt.xlabel('w1')
+    plt.ylabel('w2')
+    plt.xlim(-1.5, 3)
+    plt.ylim(-1.5, 3)
+    path = "results/"
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed or Already exists" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+    plt.savefig(path + "lam" + str(lam) + ".pdf")
+    plt.savefig(path + "lam" + str(lam) + ".eps")
 plt.show()

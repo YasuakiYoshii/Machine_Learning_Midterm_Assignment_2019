@@ -2,6 +2,17 @@ import numpy as np
 import cvxpy as cv
 import matplotlib.pyplot as plt
 
+def load3(m = 20, n = 40):
+    #dataset3
+    np.random.seed(1234)
+    r = 2
+    A = np.dot(np.random.rand(m, r), np.random.rand(r, n)).flatten()
+    ninc = 100
+    Q = np.random.permutation(m * n)[:ninc]
+    A[Q] = None
+    A = A.reshape(m, n)
+    return A, Q
+
 # Dataset IV
 def load4(n = 200):
     print('loading dataset IV .....')

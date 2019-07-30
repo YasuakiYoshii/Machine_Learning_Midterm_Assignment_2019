@@ -47,7 +47,7 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
         w_history.append(w)
         hessian = [np.zeros((5,5)), np.zeros((5,5)), np.zeros((5,5))]
         grad = np.zeros_like(w)
-        obj_fun = lam * np.trace(np.dot(w.T, w))
+        obj_fun = lam * np.linalg.norm(w)
         L = 0
         # batch
         for i in range(n):
@@ -57,7 +57,7 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
             exps = np.exp(np.dot(w.T, xi) - c)
             softmax = exps / np.sum(exps)
             for j in range(class_num):
-                if (j ==yi):
+                if (j == yi):
                     grad[:,yi] += ((softmax[yi] - 1).reshape((1,1)) * xi).reshape((5,1,1))
                 else:
                     grad[:,j] += (softmax[j].reshape((1,1)) * xi).reshape((5,))
@@ -73,7 +73,8 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
         obj_fun += L
         print(str(step).rjust(4) + ": " + str(np.linalg.norm(grad)).ljust(22) + " " + str(np.asscalar(obj_fun)))
         obj_fun_history.append(np.asscalar(obj_fun))
-        if (np.linalg.norm(grad) < tol):
+        #if (np.linalg.norm(grad) < tol):
+        if (step >= 200):
             break
         # update w
         for j in range(class_num):

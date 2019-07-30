@@ -1,13 +1,14 @@
 import adam, adaGrad, adadelta, RMSProp, nadam
 import matplotlib.pyplot as plt
 import numpy as np
+from common import diff_func
 
 def compare():
-    adam_result = adam.optimize()
-    ag_result = adaGrad.optimize()
-    ad_result = adadelta.optimize()
-    rmsp_result = RMSProp.optimize()
-    na_result = nadam.optimize()
+    adam_result = diff_func(adam.optimize())
+    ag_result = diff_func(adaGrad.optimize())
+    ad_result = diff_func(adadelta.optimize())
+    rmsp_result = diff_func(RMSProp.optimize())
+    na_result = diff_func(nadam.optimize())
 
     plt.yscale('log')
     plt.plot(adam_result, 'rs-', markersize=1, linewidth=0.5, label="Adam") # better
@@ -18,6 +19,7 @@ def compare():
     plt.legend()
     plt.savefig("compared.png")
     plt.savefig("compared.eps")
+    plt.savefig("compared.pdf")
     plt.show()
     return
 

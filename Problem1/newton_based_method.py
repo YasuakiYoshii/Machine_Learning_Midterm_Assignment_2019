@@ -31,7 +31,8 @@ def optimize(x, y, lam = 2, n = 200, alpha = 1, tol = 1e-6):
             obj_fun += np.log(1 + exp)
         print(str(step).rjust(4) + ": " + str(np.linalg.norm(grad)).ljust(22) + " " + str(np.asscalar(obj_fun)))
         obj_fun_history.append(np.asscalar(obj_fun))
-        if (np.linalg.norm(grad) < tol):
+        #if (np.linalg.norm(grad) < tol):
+        if (step >= 50):
             break
         d = np.dot(np.linalg.inv(hessian), grad)
         w -= alpha * d

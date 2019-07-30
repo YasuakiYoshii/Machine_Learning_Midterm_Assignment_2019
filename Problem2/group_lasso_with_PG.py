@@ -63,7 +63,7 @@ w_history = np.vstack(w_history)
 plt.figure() # fig 3
 plt.contour(X1, X2, fValue)
 plt.xlabel('w1')
-plt.xlabel('w2')
+plt.ylabel('w2')
 plt.plot(w_history[:,0], w_history[:,1], 'ro-', markersize=3, linewidth=0.5, label='PG with group lasso')
 plt.plot(west[0], west[1], 'ko', label='cvx with group lasso')
 plt.legend()
