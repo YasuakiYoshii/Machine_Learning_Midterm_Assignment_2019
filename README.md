@@ -1,6 +1,6 @@
 # ART.T458 Machine Learning Midterm Assignment 2019 (Tokyo Institute of Technology)
 
-I solved only Problem 1, 2 & 7. And note that my implementation is NOT perfect.
+I solved only Problem 1, 2, 6 & 7. And note that my implementation is NOT perfect.
 
 This is implemented in only Python.
 I'm sorry that it's not Matlab implementation.
@@ -8,6 +8,8 @@ I'm sorry that it's not Matlab implementation.
 * Problem 1 : implement batch steepest descent method and Newton's method
 
 * Problem 2 : implement PG
+
+* Problem 6 : nuclear norm
 
 * Problem 7 : implement Adam, AdaGrad, AdaDelta, RMS Prop, Nadam
 
@@ -98,7 +100,11 @@ You should also see the following references.
 * https://towardsdatascience.com/understanding-support-vector-machine-part-1-lagrange-multipliers-5c24a52ffc5e
 * https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-theory-f0812effc72
 
+### Proximal Operator and nuclear norm
+* https://math.stackexchange.com/questions/2009274/whats-the-proximal-operator-of-the-nuclear-norm-optimization-problem
+* http://yamagensakam.hatenablog.com/entry/2018/02/14/075106
+
 ### Markdown
 * https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
-(2019/7/9-2019/7/18)
+(2019/7/9-2019/7/31)
